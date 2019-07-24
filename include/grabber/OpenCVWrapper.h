@@ -22,6 +22,7 @@ public:
                   int hyperionPriority,
                   Hyperion * hyperion);
     virtual ~OpenCVWrapper();
+    void setTransform(bool hFlip, bool vFlip,int width, int height, std::vector<std::pair<float,float>> & persp);
 
 public slots:
     void start();
