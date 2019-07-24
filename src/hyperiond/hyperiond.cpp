@@ -448,6 +448,29 @@ void startGrabberOpenCV(const Json::Value &config, Hyperion &hyperion, ProtoServ
 			grabberConfig.get("priority", 900).asInt(),
 			&hyperion);
 
+		// transform parameters
+		if (grabberConfig.isMember("transform")) {
+			const Json::Value & transformConfig = grabberConfig["transform"];
+
+			std::vector<std::pair<float,float>> v;
+
+			if (transformConfig.isMember("perspective")){
+				const Json::Value & perspective = transformConfig["perspective"];
+
+				for (Json::Value::ArrayIndex i = 0; i != perspective.size(); i++) {
+				    v.push_back(std::make_pair(perspective[i][0].asFloat(), perspective[i][1].asFloat()));
+				}
+			}
+
+			opencvGrabber->setTransform(
+				transformConfig.get("hFlip", false).asBool(),
+				transformConfig.get("vFlip", false).asBool(),
+				transformConfig.get("width", 0).asUInt(),
+				transformConfig.get("height", 0).asUInt(),
+				v
+				);
+		}
+
 		QObject::connect(opencvGrabber, SIGNAL(emitImage(int, const Image<ColorRgb>&, const int)), protoServer, SLOT(sendImageToProtoSlaves(int, const Image<ColorRgb>&, const int)) );
 
 		opencvGrabber->start();

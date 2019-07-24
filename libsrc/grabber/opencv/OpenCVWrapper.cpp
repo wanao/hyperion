@@ -49,6 +49,11 @@ OpenCVWrapper::~OpenCVWrapper()
     delete _processor;
 }
 
+void OpenCVWrapper::setTransform(bool hFlip, bool vFlip,int width, int height, std::vector<std::pair<float,float>> & persp)
+{
+    _grabber.setTransform(hFlip,vFlip,width,height,persp);
+}
+
 void OpenCVWrapper::start()
 {
     if (_grab_timer.isActive())
